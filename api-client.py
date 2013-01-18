@@ -39,7 +39,7 @@ Pass them into the Client like this:
 
         self.account_id = account_id
         self.api_key = api_key
-        self.headers = {'x-api-key': api_key}
+        self.headers = {}
         self.retries = retries
         self.retry_delay = retry_delay
         self.timeout = timeout
@@ -74,11 +74,10 @@ Pass them into the Client like this:
             raise ApiException('No response received from remote API')
         if not str(response.status_code).startswith('2'):
             self._handle_api_error(response.status_code)
-        return self._parse_xml(response.text)
+        return self._parse_json(response.json)
 
     def _parse_json(self, response):
-        parsed_response = json.decode(response)
-        return parsed_response
+        return json.decode(response)
 
     def _handle_api_error(self, status_code, error_message):
         error_code_mappings = {
